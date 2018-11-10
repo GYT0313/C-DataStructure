@@ -81,7 +81,7 @@ void QuickSort( SeqList *L, int s, int t )
     j = t;
     tmp = L->data[i];
 
-    if ( i<j )
+    if ( s<t )
     {
         while ( i != j )
         {
