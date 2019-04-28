@@ -75,7 +75,6 @@ void BubbleSort( SeqList *L )
 /* 快速排序  O(nlog2^n) */
 void QuickSort( SeqList *L, int s, int t )
 {
-    output(L);
     int i, j, tmp;
 
     i = s;
