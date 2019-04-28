@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define  MAX   8 /*ÏßĞÔ±íµÄ×î´ó³¤¶È*/
+#define  MAX   8 /*çº¿æ€§è¡¨çš„æœ€å¤§é•¿åº¦*/
 
-typedef int ElemType; /*Êı¾İÔªËØÀàĞÍ*/
-/*Ë³Ğò±íÀàĞÍ¶¨Òå*/
+typedef int ElemType; /*æ•°æ®å…ƒç´ ç±»å‹*/
+/*é¡ºåºè¡¨ç±»å‹å®šä¹‰*/
 typedef  struct
 {
 	 ElemType  data[MAX];
-     int  length;  /*µ±Ç°±íµÄ³¤¶È*/
+     int  length;  /*å½“å‰è¡¨çš„é•¿åº¦*/
 } SeqList;
 
-/* ³õÊ¼»¯ */
+/* åˆå§‹åŒ– */
 SeqList *InitSeqlist()
 {
     SeqList *L;
@@ -20,7 +20,7 @@ SeqList *InitSeqlist()
     return L;
 }
 
-/* ÊäÈë */
+/* è¾“å…¥ */
 void input(SeqList *L)
 {
     int i;
@@ -34,7 +34,7 @@ void input(SeqList *L)
 }
 
 
-/* Êä³ö */
+/* è¾“å‡º */
 void output(SeqList *L)
 {
     int i;
@@ -47,14 +47,14 @@ void output(SeqList *L)
 
 
 
-/* Ã°ÅİÅÅĞò  O(n^2) */
+/* å†’æ³¡æ’åº  O(n^2) */
 void BubbleSort( SeqList *L )
 {
     int i, j, flag, tmp;
 
-    for ( i=1; i<L->length; i++ )   /* Ñ­»·N-1´Î */
+    for ( i=1; i<L->length; i++ )   /* å¾ªç¯N-1æ¬¡ */
     {
-        flag = 0;   /* ±êÖ¾Î» */
+        flag = 0;   /* æ ‡å¿—ä½ */
 
         for ( j=0; j<L->length-i; j++ )
         {
@@ -72,51 +72,63 @@ void BubbleSort( SeqList *L )
 }
 
 
-/* ¿ìËÙÅÅĞò  O(nlog2^n) */
+/* å¿«é€Ÿæ’åº  O(nlog2^n) */
 void QuickSort( SeqList *L, int s, int t )
 {
+    output(L);
     int i, j, tmp;
 
     i = s;
     j = t;
-    tmp = L->data[i];
-
-    if ( s<t )
+    if (s >= t)
     {
-        while ( i != j )
-        {
-            /* ÓÒ */
-            while ( i<j && L->data[j] >= tmp )    /* ÓÒ·ÖÇøa[j] >= tmp £¬¼ÌĞøÏò×óÉ¨Ãè */
-                j--;
-            if ( i<j && L->data[j] < tmp )        /* ÓĞ·ÖÇøa[j] < tmp£¬ ¸³Öµ£¬²¢×ªÏò×ó·ÖÇø */
-                L->data[i++] = L->data[j];
-            /* ×ó */
-            while ( i<j && L->data[i] <= tmp )
-                i++;
-            if ( i<j && L->data[i] > tmp )
-                L->data[j--] = L->data[i];
-        }
-        L->data[i] = tmp;
-        /* µİ¹éµ÷ÓÃ */
-        QuickSort( L, s, i-1 );
-        QuickSort( L, i+1, t );
+        return 0;
     }
+    tmp = L->data[s];
+    while ( i < j )
+    {
+        /* å³åˆ†åŒºå‘å·¦æ‰«æ */
+        while ( i<j && L->data[j] > tmp )    /* å³åˆ†åŒºa[j] >= tmp ï¼Œç»§ç»­å‘å·¦æ‰«æ */
+            j--;
+        if ( i<j )        /* å³åˆ†åŒºa[j] < tmpï¼Œ èµ‹å€¼ï¼Œå¹¶è½¬å‘å·¦åˆ†åŒº */
+        {
+            // äº¤æ¢
+            int t = L->data[j];
+            L->data[j] = L->data[i];
+            L->data[i] = t;
+            i++;
+        }
+        /* å·¦åˆ†åŒºå‘å³æ‰«æ */
+        while ( i<j && L->data[i] < tmp )
+            i++;
+        if ( i<j )
+        {
+            int t = L->data[j];
+            L->data[j] = L->data[i];
+            L->data[i] = t;
+            j--;
+        }
+    }
+    L->data[i] = tmp;
+    /* é€’å½’è°ƒç”¨ */
+    QuickSort( L, s, i-1 );
+    QuickSort( L, i+1, t );
 }
 
-/* Ñ¡ÔñÅÅĞò  O(n ^2) */
+/* é€‰æ‹©æ’åº  O(n ^2) */
 void selectSort( SeqList *L )
 {
-    int i, j, min, tmp;     /* ¸Ã´ÎÑ­»·×îĞ¡ÖµÏÂ±ê  */
+    int i, j, min, tmp;     /* è¯¥æ¬¡å¾ªç¯æœ€å°å€¼ä¸‹æ ‡  */
 
     for ( i=0; i<L->length-1; i++ )
     {
         for ( j=i+1, min=i; j<L->length; j++ )
         {
-            /* Èô×îĞ¡ÖµÎªa[min] ÔòÖØĞÂ¸³Öµmin */
+            /* è‹¥æœ€å°å€¼ä¸ºa[min] åˆ™é‡æ–°èµ‹å€¼min */
             if ( L->data[j] < L->data[min] )
                 min = j;
         }
-        /* ÅĞ¶Ï a[i] ÊÇ·ñÊÇ×îĞ¡Öµ£¬Èô²»ÊÇÔòÖØĞÂ¸³Öµ */
+        /* åˆ¤æ–­ a[i] æ˜¯å¦æ˜¯æœ€å°å€¼ï¼Œè‹¥ä¸æ˜¯åˆ™é‡æ–°èµ‹å€¼ */
         if ( min != i )
         {
             tmp = L->data[i];
@@ -126,65 +138,65 @@ void selectSort( SeqList *L )
     }
 }
 
-/* ²åÈëÅÅĞò O(n^2) */
+/* æ’å…¥æ’åº O(n^2) */
 void InsertSort( SeqList *L )
 {
     int i, j, tmp;
 
-    /* i =1, µÚÒ»¸öÊı¾İ×÷ÎªÓĞĞò¶Ô£¬ÆäÓàÊı¾İ×÷ÎªÎŞĞò¶Ô */
+    /* i =1, ç¬¬ä¸€ä¸ªæ•°æ®ä½œä¸ºæœ‰åºå¯¹ï¼Œå…¶ä½™æ•°æ®ä½œä¸ºæ— åºå¯¹ */
     for ( i=1; i<L->length; i++ )
     {
-        tmp = L->data[i];   /* tmp Îª´ıÅÅÊı¾İ */
-        j = i-1;    /* jÖ¸Ïò´ıÅÅÊı¾İµÄÇ°Ò»¸öÊı¾İ */
-        /* Ñ­»·ÕÒ³ö´ıÅÅÊı¾İµÄÎ»ÖÃ£¬Í¬Ê±ÓÖÓĞÊı¾İµÄºóÒÆ */
+        tmp = L->data[i];   /* tmp ä¸ºå¾…æ’æ•°æ® */
+        j = i-1;    /* jæŒ‡å‘å¾…æ’æ•°æ®çš„å‰ä¸€ä¸ªæ•°æ® */
+        /* å¾ªç¯æ‰¾å‡ºå¾…æ’æ•°æ®çš„ä½ç½®ï¼ŒåŒæ—¶åˆæœ‰æ•°æ®çš„åç§» */
         while ( j>=0 && tmp < L->data[j] )
         {
             L->data[j+1] = L->data[j];
             j--;
         }
-        L->data[j+1] = tmp;     /* j+1 Îª´ø²åÈëÊı¾İµÄÎ»ÖÃ */
+        L->data[j+1] = tmp;     /* j+1 ä¸ºå¸¦æ’å…¥æ•°æ®çš„ä½ç½® */
     }
 }
 
-/* Ï£¶ûÅÅĞò  O(n^(2/3) */
+/* å¸Œå°”æ’åº  O(n^(2/3) */
 void ShellSort( SeqList *L )
 {
     int d, i, j, tmp;
 
-    /* Ã¿´ÎÒÔ d Îª¼ä¾à½øĞĞ·Ö×é */
+    /* æ¯æ¬¡ä»¥ d ä¸ºé—´è·è¿›è¡Œåˆ†ç»„ */
     for ( d=L->length/2; d>0; d/=2 )
     {
-        /* Ã¿´Î½øĞĞÃ¿×éµÄÒ»¸öÊı¾İµÄÅÅĞò£¨·ÖÊ±£© */
+        /* æ¯æ¬¡è¿›è¡Œæ¯ç»„çš„ä¸€ä¸ªæ•°æ®çš„æ’åºï¼ˆåˆ†æ—¶ï¼‰ */
         for ( i=d; i<L->length; i++ )
         {
             tmp = L->data[i];
-            /* Ö±½ÓÅÅĞò£¬´ÓºóÍùÇ° */
+            /* ç›´æ¥æ’åºï¼Œä»åå¾€å‰ */
             for ( j=i-d; j>=0 && tmp<L->data[j]; j-=d )
             {
                 L->data[j+d] = L->data[j];
             }
-            L->data[j+d] = tmp;     /* ÒòÎªÉÏ²ãforÑ­»·Ìø³ö¶àÖ´ĞĞÁËÒ»´Î j-d */
+            L->data[j+d] = tmp;     /* å› ä¸ºä¸Šå±‚forå¾ªç¯è·³å‡ºå¤šæ‰§è¡Œäº†ä¸€æ¬¡ j-d */
         }
     }
 }
 
 
-/* ²Ëµ¥ */
+/* èœå• */
 int menu()
 {
     int choice;
 
-    printf("               |****************Ë³Ğò±íÅÅĞò²Ù×÷************|\n");
-    printf("               |                 1. Ã°ÅİÅÅĞò·¨            |\n");
-    printf("               |                 2. ¿ìËÙÅÅĞò·¨            |\n");
-    printf("               |                 3. Ñ¡ÔñÅÅĞò·¨            |\n");
-    printf("               |                 4. ²åÈëÅÅĞò·¨            |\n");
-    printf("               |                 5. Ï£¶ûÅÅĞò              |\n");
-    printf("               |                 0. ÍË³ö                  |\n");
+    printf("               |****************é¡ºåºè¡¨æ’åºæ“ä½œ************|\n");
+    printf("               |                 1. å†’æ³¡æ’åºæ³•            |\n");
+    printf("               |                 2. å¿«é€Ÿæ’åºæ³•            |\n");
+    printf("               |                 3. é€‰æ‹©æ’åºæ³•            |\n");
+    printf("               |                 4. æ’å…¥æ’åºæ³•            |\n");
+    printf("               |                 5. å¸Œå°”æ’åº              |\n");
+    printf("               |                 0. é€€å‡º                  |\n");
     printf("               |******************************************|\n");
 
     do{
-        printf("ÇëÊäÈë(0~5): ");
+        printf("è¯·è¾“å…¥(0~5): ");
         scanf("%d", &choice);
     }while( choice < 0 || choice > 5 );
 
@@ -201,8 +213,8 @@ void form()
     {
         switch( menu() )
         {
-        case 1: /* 1. Ã°ÅİÅÅĞò·¨ */
-            printf("\t\tÃ°ÅİÅÅĞò£º\n");
+        case 1: /* 1. å†’æ³¡æ’åºæ³• */
+            printf("\t\tå†’æ³¡æ’åºï¼š\n");
             L = InitSeqlist();
             input( L );
             printf("\n\tBefore sort: \n");
@@ -211,11 +223,11 @@ void form()
             printf("\tSort:\n");
             output( L );
             printf("\n");
-            system("pause"); //ÔİÍ£
-            system("cls"); //ÇåÆÁ
+            system("pause"); //æš‚åœ
+            system("cls"); //æ¸…å±
             break;
-        case 2: /* 2. ¿ìËÙÅÅĞò·¨ */
-            printf("\t\t¿ìËÙÅÅĞò£º\n");
+        case 2: /* 2. å¿«é€Ÿæ’åºæ³• */
+            printf("\t\tå¿«é€Ÿæ’åºï¼š\n");
             L = InitSeqlist();
             input( L );
             printf("\n\tBefore sort: \n");
@@ -224,12 +236,12 @@ void form()
             printf("\tSort:\n");
             output( L );
             printf("\n");
-            system("pause"); //ÔİÍ£
-            system("cls"); //ÇåÆÁ
+            system("pause"); //æš‚åœ
+            system("cls"); //æ¸…å±
 
             break;
-        case 3: /* 3. Ñ¡ÔñÅÅĞò·¨ */
-            printf("\t\tÑ¡ÔñÅÅĞò£º\n");
+        case 3: /* 3. é€‰æ‹©æ’åºæ³• */
+            printf("\t\té€‰æ‹©æ’åºï¼š\n");
             L = InitSeqlist();
             input( L );
             printf("\n\tBefore sort: \n");
@@ -238,12 +250,12 @@ void form()
             printf("\tSort:\n");
             output( L );
             printf("\n");
-            system("pause"); //ÔİÍ£
-            system("cls"); //ÇåÆÁ
+            system("pause"); //æš‚åœ
+            system("cls"); //æ¸…å±
 
             break;
-        case 4: /* 4. ²åÈëÅÅĞò·¨ */
-            printf("\t\t²åÈëÅÅĞò£º\n");
+        case 4: /* 4. æ’å…¥æ’åºæ³• */
+            printf("\t\tæ’å…¥æ’åºï¼š\n");
             L = InitSeqlist();
             input( L );
             printf("\n\tBefore sort: \n");
@@ -252,12 +264,12 @@ void form()
             printf("\tSort:\n");
             output( L );
             printf("\n");
-            system("pause"); //ÔİÍ£
-            system("cls"); //ÇåÆÁ
+            system("pause"); //æš‚åœ
+            system("cls"); //æ¸…å±
 
             break;
-        case 5: /* 5. Ï£¶ûÅÅĞò */
-            printf("\t\tÏ£¶ûÅÅĞò£º\n");
+        case 5: /* 5. å¸Œå°”æ’åº */
+            printf("\t\tå¸Œå°”æ’åºï¼š\n");
             L = InitSeqlist();
             input( L );
             printf("\n\tBefore sort: \n");
@@ -266,11 +278,11 @@ void form()
             printf("\tSort:\n");
             output( L );
             printf("\n");
-            system("pause"); //ÔİÍ£
-            system("cls"); //ÇåÆÁ
+            system("pause"); //æš‚åœ
+            system("cls"); //æ¸…å±
 
             break;
-        case 0: /* 0. ÍË³ö */
+        case 0: /* 0. é€€å‡º */
             flag = 0;
         }
     }
